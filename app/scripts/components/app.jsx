@@ -39,6 +39,7 @@ var IngredientList = React.createClass({
     var ingredientCollection = new IngredientCollection();
     var recipe = new Recipe();
 
+//gotta figure out how to login and then point an objectID to the recipe.
   ingredientCollection.add([
     {quantity: '2', title: 'carrots' },
     {quantity: '1', title: 'potatos' },
@@ -52,7 +53,7 @@ var IngredientList = React.createClass({
   render: function(){
     return(
       <div>
-        <h1>Ingredient List</h1>
+        <h1>Recipes</h1>
         <IngredientTemplate ingredientItems={this.state.ingredientCollection}/>
       </div>
     )
@@ -76,9 +77,9 @@ var RecipeForm = React.createClass({
             <table>
               <tbody>
                 <tr>
-                  <th>Makes</th>
+                {/*  <th>Makes</th>
                   <th><input type="text" value=""/></th>
-                  <th>Servings</th>
+                  <th>Servings</th> */}
                 </tr>
               </tbody>
             </table>
@@ -105,10 +106,11 @@ var NavBar = React.createClass({
           </div>
           <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul className="nav navbar-nav">
-              <li className="active"><a href="#">Add Receipe <span className="sr-only">(current)</span></a></li>
+              <li className="active"><a href="#">Add Recipe <span className="sr-only">(current)</span></a></li>
               {/*Add for Form for the recipes!*/}
-              <li><a href="#">Recipes List</a></li>
+              <li><a href="">Recipes</a></li>
               {/*see a list of all the great receipes on the API!*/}
+              <li><a href="#login/">Login</a></li>
             </ul>
             <ul className="nav navbar-nav navbar-right">
               <li><a href="#">Link</a></li>
@@ -134,5 +136,6 @@ var RecipeApp = React.createClass({
 })
 
 module.exports = {
-  RecipeApp: RecipeApp
+  RecipeApp: RecipeApp,
+  NavBar
 }

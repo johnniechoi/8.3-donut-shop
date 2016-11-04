@@ -3,7 +3,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var $ = require('jquery')
 
-var LoginContainer = require('./components/login.jsx').LoginContainer;
+var AccountContainer = require('./components/login.jsx').AccountContainer;
 var RecipeApp = require('./components/app.jsx').RecipeApp;
 
 var AppRouter = Backbone.Router.extend({
@@ -29,7 +29,7 @@ var AppRouter = Backbone.Router.extend({
   },
   login: function(){
     ReactDOM.render(
-      React.createElement(LoginContainer),
+      React.createElement(AccountContainer),
       document.getElementById('app')
   );
 }
