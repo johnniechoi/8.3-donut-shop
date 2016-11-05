@@ -9,7 +9,7 @@ var Recipe = Backbone.Model.extend({
 
 var RecipeCollection = Backbone.Collection.extend({
   model: Recipe,
-  url: 'https://masterj.herokuapp.com/classes/recipeCollection'
+  url: 'https://masterj.herokuapp.com/classes/recipe'
 })
 
 var Ingredient = Backbone.Model.extend({
@@ -18,7 +18,7 @@ var Ingredient = Backbone.Model.extend({
 
 var IngredientCollection = Backbone.Collection.extend({
   model: Ingredient,
-  url: 'https://masterj.herokuapp.com/classes/IngredientCollection'
+  url: 'https://masterj.herokuapp.com/classes/ingredient'
 })
 
 module.exports = {
