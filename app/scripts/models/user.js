@@ -5,16 +5,14 @@ var User = Backbone.Model.extend({
   signUp: function(){
 
       var self = this;
-      var user = this.get('username');
-      var password = this.get('password');
-      console.log(user);
-        // console.log(localStorage);
+      // var user = this.get('username');
+      // var password = this.get('password');
+        // console.log(password);
     this.save().then(function(data){
+      // console.log(data);
+
       localStorage.setItem('user', JSON.stringify(self.toJSON()))
-      localStorage.setItem('objectId', data.objectId);
-      localStorage.setItem('createdAt', data.createdAt);
-      localStorage.setItem('sessionToken', data.sessionToken);
-      // console.log(localStorage);
+      console.log(localStorage);
 
     })
   }

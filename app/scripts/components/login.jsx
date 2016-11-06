@@ -2,7 +2,7 @@ var React = require('react');
 var $ = require('jquery')
 
 var User = require('../models/user.js').User;
-var Navbar = require('./app.jsx').NavBar
+var NavBar = require('../template.jsx').NavBar;
 
 require('../models/login.js')
 
@@ -16,7 +16,7 @@ var response = function setHeader(response){
   });
 }
 
-  console.log(localStorage.sessionToken);
+  // console.log(localStorage.user);
 
 var SignInContainer = React.createClass({
   getInitialState: function(){
@@ -49,7 +49,7 @@ var SignInContainer = React.createClass({
             <form onSubmit={this.handleLogin} id="signup">
               <div className="form-group">
                 <label htmlFor="text">User Name</label>
-                <input onChange={this.handleSignIn} value={this.state.user} className="form-control" name="name" id="email" type="text" placeholder="peter doe" />
+                <input onChange={this.handleSignIn} value={this.state.user} className="form-control" name="name" id="email" type="text" placeholder="peterdoe" />
               </div>
               <div className="form-group">
                 <label htmlFor="password">Password</label>
@@ -71,9 +71,15 @@ var LoginContainer = React.createClass({
   handlePassword: function(e){
     this.setState({password: e.target.value});
   },
-  // handleLogin: function(e){
-  //
-  // },
+  handleLogin: function(e){
+    e.preventDefault();
+    var accountInfo = {
+      user: this.state.user,
+      password: this.state.password
+    };
+    this.props.loginRequests(accountInfo)
+    this.setState({user: '', password: ''});
+  },
   render: function(){
     return(
       <div>
@@ -81,8 +87,8 @@ var LoginContainer = React.createClass({
           <h2>Login</h2>
           <form onSubmit={this.handleLogin} id="login">
             <div className="form-group">
-              <label htmlFor="email-login">Email address</label>
-              <input onChange={this.handleSignIn} className="form-control" name="email" id="email-login" type="email" placeholder="email" />
+              <label htmlFor="text">Email address</label>
+              <input onChange={this.handleSignIn} className="form-control" name="email" id="email-login" type="text" placeholder="username" />
             </div>
             <div className="form-group">
               <label htmlFor="password-login">Password</label>
@@ -104,17 +110,24 @@ var AccountContainer = React.createClass({
   },
   newUser: function(user, password){
     this.state.user.set({username: user, password: password});
-    // console.log('NewUser: ', this.state.user)
     // user and signUp() is from the user.js model for connecting with the server.
     this.state.user.signUp();
-      // console.log('NewUser: ', user, password);
-    // var response = $.post('https://masterj.herokuapp.com/users', data).then(function(response){
-    //   console.log(response.sessionToken);
-    //   // setHeader(response.sessionToken)
-    //
-    // });
-    // setHeader(response)
   },
+  loginRequests: function(accountInfo){
+    this.setState({ accountInfo })
+    var username = accountInfo.user;
+    var password = accountInfo.password;
+    $.get('https://masterj.herokuapp.com/login?username=' + username + '&password=' + password).then(function(response){
+        console.log(response.username);
+        console.log(response.sessionToken);
+        localStorage.setItem('username', response.username);
+        localStorage.setItem('token', response.sessionToken);
+//how to I get to the recipe page when logged in? Received the sessionToken?
+        // if (response.sessionToken) {
+        //   self.props.router.navigate('', {trigger: true});
+        // };
+      });
+    },
   render: function(){
     return(
       <div className="container">
@@ -122,8 +135,8 @@ var AccountContainer = React.createClass({
           <div className="col-md-12 text-center">
           </div>
         </div>
-        <Navbar/>
-        <LoginContainer/>
+        <NavBar/>
+        <LoginContainer loginRequests={this.loginRequests}/>
         <SignInContainer newUser={this.newUser}/>
 
       </div>

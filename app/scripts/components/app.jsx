@@ -1,15 +1,16 @@
 var React = require('react');
 var Backbone = require('backbone');
 
-var Ingredient = require('../models/recipe.jsx').Ingredient;
-var IngredientCollection = require('../models/recipe.jsx').IngredientCollection;
-var Recipe = require('../models/recipe.jsx').Recipe;
+var Ingredient = require('../models/models.js').Ingredient;
+var IngredientCollection = require('../models/models.js').IngredientCollection;
+var RecipeModel = require('../models/models.js').Recipe;
+var RecipeForm = require('./recipes.jsx').RecipeForm;
+var NavBar = require('../template.jsx').NavBar;
 
 
 var IngredientTemplate = React.createClass({
   render: function(){
     var self = this;
-    console.log(this.props.ingredientItems);
     var recipe = this.props.ingredientItems.map(function(ingredient){
       return(
         <div key={ingredient.cid}>
@@ -37,7 +38,7 @@ var IngredientList = React.createClass({
   getInitialState: function(){
     var ingredient = new Ingredient();
     var ingredientCollection = new IngredientCollection();
-    var recipe = new Recipe();
+    var recipe = new RecipeModel();
 
 //gotta figure out how to login and then point an objectID to the recipe.
   ingredientCollection.add([
@@ -77,9 +78,9 @@ var RecipeForm = React.createClass({
             <table>
               <tbody>
                 <tr>
-                {/*  <th>Makes</th>
+                  <th>Makes</th>
                   <th><input type="text" value=""/></th>
-                  <th>Servings</th> */}
+                  <th>Servings</th>
                 </tr>
               </tbody>
             </table>
@@ -90,40 +91,7 @@ var RecipeForm = React.createClass({
   }
 })
 
-var NavBar = React.createClass({
-  render: function(){
-    return(
-      <nav className="navbar navbar-default">
-        <div className="container-fluid">
-          <div className="navbar-header">
-            <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-              <span className="sr-only">Toggle navigation</span>
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-            </button>
-            <a className="navbar-brand" href="#">Dan's Cookbook</a>
-          </div>
-          <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul className="nav navbar-nav">
-              <li className="active"><a href="#">Add Recipe <span className="sr-only">(current)</span></a></li>
-              {/*Add for Form for the recipes!*/}
-              <li><a href="">Recipes</a></li>
-              {/*see a list of all the great receipes on the API!*/}
-              <li><a href="#login/">Login</a></li>
-            </ul>
-            <ul className="nav navbar-nav navbar-right">
-              <li><a href="#">Link</a></li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-    )
-  }
-})
-
 var RecipeApp = React.createClass({
-
   render: function(){
     return(
       <div className="container">
@@ -136,6 +104,5 @@ var RecipeApp = React.createClass({
 })
 
 module.exports = {
-  RecipeApp: RecipeApp,
-  NavBar
+  RecipeApp,
 }
