@@ -7,14 +7,18 @@ var NavBar = require('../template.jsx').NavBar;
 var RecipeTemplate = React.createClass({
   getInitialState: function(){
     return {
-      title: '',
+      recipe: '',
       quantity: '',
       measurement: '',
-      ingredient: ''
+      ingredient: '',
+      serving: ''
     }
   },
   handleRecipeTitle: function(e){
     this.setState({recipe: e.target.value});
+  },
+  handleServing: function(e){
+    this.setState({serving: e.target.value});
   },
   handleQuantity: function(e){
     this.setState({quantity: e.target.value});
@@ -27,7 +31,7 @@ var RecipeTemplate = React.createClass({
   },
   handleSubmit: function(e){
     e.preventDefault();
-    // how is the pointer supposed to be placed in here? 
+    // how is the pointer supposed to be placed in here?
     var data = {
       username: localStorage.getItem('username'),
       quantity: this.state.quantity,
@@ -36,11 +40,13 @@ var RecipeTemplate = React.createClass({
     };
     var dataTitle = {
       username: localStorage.getItem('username'),
-      recipe: this.state.recipe
+      recipe: this.state.recipe,
+      serving: this.state.serving
     }
-    console.log(dataTitle);
+    console.log('dataTitle: ', dataTitle);
     this.props.submitTitle(dataTitle);
-    this.setState({title: ''})
+    console.log('state: ', this.state);
+    this.setState({recipe: '', serving: ''})
     this.props.submitIngredients(data)
     this.setState({quantity: '', measurement: '', ingredient: ''});
   },
@@ -51,6 +57,10 @@ var RecipeTemplate = React.createClass({
           <div className="form-group">
             <label htmlFor="recipe">Recipe Name</label>
             <input onChange={this.handleRecipeTitle} value={this.state.recipe} className="form-control" name="recipeTitle" id="recipe-title" type="text" placeholder="Chick Pot Pie" />
+          </div>
+          <div className="form-group">
+            <label htmlFor="recipe">Servings Quantity</label>
+            <input onChange={this.handleServing} value={this.state.serving} className="form-control" name="recipeServing" id="recipe-serving" type="text" placeholder="4" />
           </div>
           <div className="form-group">
             <label htmlFor="quantity">Quantity</label>
@@ -75,7 +85,7 @@ var RecipeForm = React.createClass({
   submitTitle: function(dataTitle){
     this.setState({ dataTitle })
     $.post('https://masterj.herokuapp.com/classes/recipe', dataTitle).then(function(response){
-      console.log(response);
+      console.log('response: ', response);
     });
   },
   submitIngredients: function(data){

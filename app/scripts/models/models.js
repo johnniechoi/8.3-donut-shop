@@ -4,7 +4,7 @@ var React = require('react');
 
 
 var Recipe = Backbone.Model.extend({
-    idAttribute: '_id',
+    idAttribute: 'objectId',
 });
 
 var RecipeCollection = Backbone.Collection.extend({
@@ -13,7 +13,7 @@ var RecipeCollection = Backbone.Collection.extend({
 })
 
 var Ingredient = Backbone.Model.extend({
-    idAttribute: '_id'
+    idAttribute: 'objectId'
 });
 
 var IngredientCollection = Backbone.Collection.extend({
