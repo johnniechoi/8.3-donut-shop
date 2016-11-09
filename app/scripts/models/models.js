@@ -1,10 +1,9 @@
 var Backbone = require('backbone');
 var React = require('react');
 
-
-
 var Recipe = Backbone.Model.extend({
     idAttribute: 'objectId',
+    urlRoot: 'https://masterj.herokuapp.com/classes/recipe'
 });
 
 var RecipeCollection = Backbone.Collection.extend({

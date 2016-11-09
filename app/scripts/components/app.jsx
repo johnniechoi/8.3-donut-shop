@@ -10,32 +10,29 @@ var NavBar = require('../template.jsx').NavBar;
 
 
 var RecipeList = React.createClass({
-  getInitialState: function(){
-    var self = this;
-    var recipe = new RecipeCollection();
-    recipe.fetch().then(function(data){
-      recipe.reset([])
-      var recipeList = data.results;
-      recipeList.map(function(recipeList){
-        recipe.add(recipeList)
-      })
-      self.setState({recipe: recipe})
-    })
-    return{
-      recipe: recipe
-    }
-  },
+  // getInitialState: function(){
+  //   var ingredients = this.props.recipes;
+    // console.log('recipe state: ', this.state.recipes);
+      // console.log('ingredients: ', ingredients);
+  // },
   render: function(){
-    var recipeListing = this.state.recipe.map(function(recipe){      return(
-        <table>
+    // console.log("Just date: ", new Date());
+    // console.log("toJSON: ", (new Date()).toJSON());
+    // var ingredients = JSON.parse(this.state.recipes)
+    var recipeListing = this.props.recipes.map(function(item){
+      // console.log('recipeListing: ', item)
+      return(
+        <table key={item.cid}>
           <tbody>
             <tr>
-              <th> {recipe.get('recipe')} </th>
+              <th> {item.get('recipe')} serving </th>
+              <th> {item.get('serving')} </th>
             </tr>
           </tbody>
         </table>
       )
     })
+      // console.log(recipeListing);
     return(
       <h1>{recipeListing}</h1>
     )
@@ -43,37 +40,15 @@ var RecipeList = React.createClass({
 })
 
 var IngredientList = React.createClass({
-  getInitialState: function(){
-    var self = this;
-    var ingredient = new Ingredient();
-    var ingredientCollection = new IngredientCollection();
-    ingredientCollection.fetch().then(function(data){
-      ingredientCollection.reset([])
-      var ingredient = data.results;
-      ingredient.map(function(ingredient){
-        ingredientCollection.add(ingredient)
-      })
-      self.setState({ingredientCollection: ingredientCollection})
-    })
-//gotta figure out how to login and then point an objectID to the recipe.
-  ingredientCollection.add([
-    {quantity: '2', ingredient: 'carrots' },
-    {quantity: '1', ingredient: 'potatos' },
-    {quantity: '.5', ingredient: 'peas' }
-  ])
-    return{
-      ingredient: ingredient,
-      ingredientCollection: ingredientCollection
-    }
-  },
   render: function(){
+    var ingredients = this.props.recipes.get('ingredients')
+      console.log(this.props.recipes);
     return(
-      <div>
-        <IngredientForm ingredientItems={this.state.ingredientCollection}/>
-      </div>
+      <h1></h1>
     )
   }
-});
+})
+
 
 var IngredientForm = React.createClass({
   getInitialState: function(){
@@ -86,7 +61,7 @@ var IngredientForm = React.createClass({
   },
   handleSubmit: function(e){
     e.preventDefault();
-    var inputQty = this.state.inputQtyx
+    var inputQty = this.state.inputQty
   },
   render: function(){
     var self = this;
@@ -136,12 +111,29 @@ var IngredientForm = React.createClass({
 })
 
 var RecipeApp = React.createClass({
+  getInitialState: function(){
+    var self = this;
+    var recipes = new RecipeCollection();
+    recipes.fetch().then(function(data){
+      recipes.reset([])
+      var recipeList = data.results;
+      // console.log("recipeList: ", recipeList);
+      recipeList.map(function(recipeList){
+        recipes.add(recipeList)
+      })
+      self.setState({recipes: recipes})
+    })
+    return{
+      recipes: recipes
+    }
+  },
   render: function(){
+    console.log('recipe log: ', this.state.recipes);
     return(
       <div className="container">
         <NavBar/>
-          <RecipeList/>
-        <IngredientList/>
+          <RecipeList recipes={this.state.recipes}/>
+        <IngredientList recipes={this.state.recipes}/>
       </div>
     )
   }
@@ -150,3 +142,30 @@ var RecipeApp = React.createClass({
 module.exports = {
   RecipeApp,
 }
+
+// var IngredientList = React.createClass({
+//   getInitialState: function(){
+//     var self = this;
+//     var ingredient = new Ingredient();
+//     var ingredientCollection = new IngredientCollection();
+//     ingredientCollection.fetch().then(function(data){
+//       ingredientCollection.reset([])
+//       var ingredient = data.results;
+//       ingredient.map(function(ingredient){
+//       ingredientCollection.add(ingredient)
+//       })
+//       self.setState({ingredientCollection: ingredientCollection})
+//     })
+//     return{
+//       ingredient: ingredient,
+//       ingredientCollection: ingredientCollection
+//     }
+//   },
+//   render: function(){
+//     return(
+//       <div>
+//         <IngredientForm ingredientItems={this.state.ingredientCollection}/>
+//       </div>
+//     )
+//   }
+// });

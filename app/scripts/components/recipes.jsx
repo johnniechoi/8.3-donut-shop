@@ -3,6 +3,7 @@ var $ = require('jquery')
 
 var User = require('../models/user.js').User;
 var NavBar = require('../template.jsx').NavBar;
+var Recipe = require('../models/models.js').Recipe;
 
 var RecipeTemplate = React.createClass({
   getInitialState: function(){
@@ -10,8 +11,9 @@ var RecipeTemplate = React.createClass({
       recipe: '',
       quantity: '',
       measurement: '',
-      ingredient: '',
-      serving: ''
+      name: '',
+      serving: '',
+      ingName: ''
     }
   },
   handleRecipeTitle: function(e){
@@ -27,52 +29,43 @@ var RecipeTemplate = React.createClass({
     this.setState({measurement: e.target.value});
   },
   handleIngredient: function(e){
-    this.setState({ingredient: e.target.value});
+    this.setState({ingName: e.target.value});
   },
   handleSubmit: function(e){
     e.preventDefault();
     // how is the pointer supposed to be placed in here?
     var data = {
-      username: localStorage.getItem('username'),
       quantity: this.state.quantity,
       measurement: this.state.measurement,
-      ingredient: this.state.ingredient
+      ingName: this.state.ingName
     };
     var dataTitle = {
       username: localStorage.getItem('username'),
       recipe: this.state.recipe,
-      serving: this.state.serving
+      serving: this.state.serving,
+      ingredients: [data]
     }
-    console.log('dataTitle: ', dataTitle);
     this.props.submitTitle(dataTitle);
-    console.log('state: ', this.state);
     this.setState({recipe: '', serving: ''})
-    this.props.submitIngredients(data)
-    this.setState({quantity: '', measurement: '', ingredient: ''});
+    // console.log('dataTitle: ', dataTitle);
+    // console.log('state: ', this.state);
+    // this.props.submitIngredients(data)
+    // this.setState({quantity: '', measurement: '', name: ''});
   },
   render: function(){
     return (
       <div className="col-md-6">
         <form onSubmit={this.handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="recipe">Recipe Name</label>
-            <input onChange={this.handleRecipeTitle} value={this.state.recipe} className="form-control" name="recipeTitle" id="recipe-title" type="text" placeholder="Chick Pot Pie" />
+          <div>
+            <h3 htmlFor="quantity" className="">Recipe</h3>
+            <input onChange={this.handleRecipeTitle} value={this.state.recipe} name="recipeTitle" id="recipe-title" type="text" placeholder="Recipe Name" />
+            <input onChange={this.handleServing} value={this.state.serving} name="recipeServing" id="recipe-serving" type="text" placeholder="Servings Quantity" />
           </div>
           <div className="form-group">
-            <label htmlFor="recipe">Servings Quantity</label>
-            <input onChange={this.handleServing} value={this.state.serving} className="form-control" name="recipeServing" id="recipe-serving" type="text" placeholder="4" />
-          </div>
-          <div className="form-group">
-            <label htmlFor="quantity">Quantity</label>
-            <input onChange={this.handleQuantity} value={this.state.quantity} className="form-control" name="recipeQuantity" id="recipe-Quantity" type="text" placeholder="1..." />
-          </div>
-          <div className="form-group">
-            <label htmlFor="measurement">Cups or Pounds? Dunno</label>
-            <input onChange={this.handleMeasurement} value={this.state.measurement} className="form-control" name="recipeMeasurement" id="recipe-measurement" type="text" placeholder="ounces/pounds" />
-          </div>
-          <div className="form-group">
-            <label htmlFor="type">Type of Ingredient</label>
-            <input onChange={this.handleIngredient} value={this.state.ingredient} className="form-control" name="recipeIngredient" id="recipe-Ingredient" type="text" placeholder="flour..." />
+            <h3 htmlFor="quantity" className="">Ingredients</h3>
+            <input onChange={this.handleQuantity} value={this.state.quantity} name="recipeQuantity" id="recipe-Quantity" type="text" placeholder="Quantity" />
+            <input onChange={this.handleMeasurement} value={this.state.measurement} name="recipeMeasurement" id="recipe-measurement" type="text" placeholder="Cups or Pounds?" />
+            <input onChange={this.handleIngredient} value={this.state.ingName}  name="recipeIngredient" id="recipe-Ingredient" type="text" placeholder="Type of Ingredient" />
           </div>
           <input className="btn btn-primary" type="submit" value="Beam Me Up!" />
         </form>
@@ -83,17 +76,14 @@ var RecipeTemplate = React.createClass({
 
 var RecipeForm = React.createClass({
   submitTitle: function(dataTitle){
-    this.setState({ dataTitle })
-    $.post('https://masterj.herokuapp.com/classes/recipe', dataTitle).then(function(response){
-      console.log('response: ', response);
-    });
-  },
-  submitIngredients: function(data){
-    this.setState({ data })
-    // console.log(localStorage.token);
-    $.post('https://masterj.herokuapp.com/classes/ingredient', data).then(function(response){
-      // console.log(response);
-    });
+    this.setState({ dataTitle });
+    var recipes = new Recipe();
+    recipes.set(dataTitle);
+    recipes.save();
+      console.log('recipe: ', dataTitle);
+    // $.post('https://masterj.herokuapp.com/classes/recipe', dataTitle).then(function(response){
+    //   console.log('response: ', response);
+    // });
   },
   render: function(){
     return(
