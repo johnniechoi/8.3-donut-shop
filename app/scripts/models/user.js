@@ -12,8 +12,6 @@ var User = Backbone.Model.extend({
       // console.log(data);
 
       localStorage.setItem('user', JSON.stringify(self.toJSON()))
-      console.log(localStorage);
-
     })
   }
 })

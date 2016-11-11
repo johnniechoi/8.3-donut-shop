@@ -4,28 +4,21 @@ var ReactDOM = require('react-dom');
 var $ = require('jquery')
 
 var AccountContainer = require('./components/login.jsx').AccountContainer;
-var RecipeApp = require('./components/app.jsx').RecipeApp;
+var RecipeList = require('./components/app.jsx').RecipeList;
 var RecipeForm = require('./components/recipes.jsx').RecipeForm;
+var RecipeDetailContainer = require('./components/recipedetail.jsx').RecipeDetailContainer;
 
 var AppRouter = Backbone.Router.extend({
   routes: {
     '': 'index',
     'login/': 'login',
-    'recipe/': 'recipe'
+    'recipe/': 'recipe',
+    'recipe/:id/': 'recipeDetail'
   },
 
-  //Execute is check if there is a user logged in. If not, it will boot them out.
-
-  // execute: function(callback, args, name){
-  //   var user = User.current();
-  //   if (!user){
-  //     this.navigate('login/')
-  //   }
-  // },
-  //Coffee List View
   index: function(){
     ReactDOM.render(
-      React.createElement(RecipeApp),
+      React.createElement(RecipeList),
       document.getElementById('app')
     )
   },
@@ -38,6 +31,12 @@ var AppRouter = Backbone.Router.extend({
   recipe: function(){
     ReactDOM.render(
       React.createElement(RecipeForm),
+      document.getElementById('app')
+    );
+  },
+  recipeDetail: function(id){
+    ReactDOM.render(
+      React.createElement(RecipeDetailContainer, {recipeId: id}),
       document.getElementById('app')
     );
   }

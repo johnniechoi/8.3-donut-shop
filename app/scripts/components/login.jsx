@@ -25,7 +25,6 @@ var SignInContainer = React.createClass({
       password: ''
     }
   },
-
   handleSignIn: function(e){
     this.setState({user: e.target.value});
   },
@@ -43,7 +42,7 @@ var SignInContainer = React.createClass({
   render: function(){
     return(
       <div>
-        <div className="row">
+        <div className="">
           <div className="col-md-6">
             <h2>Sign In</h2>
             <form onSubmit={this.handleLogin} id="signup">
@@ -82,7 +81,7 @@ var LoginContainer = React.createClass({
   },
   render: function(){
     return(
-      <div>
+      <div className="">
         <div className="col-md-6">
           <h2>Login</h2>
           <form onSubmit={this.handleLogin} id="login">
@@ -122,7 +121,7 @@ var AccountContainer = React.createClass({
         console.log(response.sessionToken);
         localStorage.setItem('username', response.username);
         localStorage.setItem('token', response.sessionToken);
-//how to I get to the recipe page when logged in? Received the sessionToken?
+//how do I get to the recipe page when logged in? Received the sessionToken?
         // if (response.sessionToken) {
         //   self.props.router.navigate('', {trigger: true});
         // };
@@ -132,13 +131,12 @@ var AccountContainer = React.createClass({
     return(
       <div className="container">
         <div className="row">
-          <div className="col-md-12 text-center">
+          <div className="col-md-12 ">
+            <NavBar/>
+            <LoginContainer loginRequests={this.loginRequests}/>
+            <SignInContainer newUser={this.newUser}/>
           </div>
         </div>
-        <NavBar/>
-        <LoginContainer loginRequests={this.loginRequests}/>
-        <SignInContainer newUser={this.newUser}/>
-
       </div>
     )
   }
