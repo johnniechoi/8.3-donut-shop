@@ -12,7 +12,7 @@ var RecipeAdd = React.createClass({
     }
   },
   handleRecipeTitle: function(e){
-    this.setState({recipe: e.target.value});
+    this.setState({title: e.target.value});
   },
   handleServing: function(e){
     this.setState({serving: e.target.value});
@@ -26,45 +26,50 @@ var RecipeAdd = React.createClass({
   handleIngredient: function(e){
     this.setState({ingName: e.target.value});
   },
-  handleSubmit: function(e){
-    e.preventDefault();
-    var recipeData = {
-      username: localStorage.getItem('username'),
-      recipe: this.state.recipe,
-      serving: this.state.serving,
-      ingredients: []
-    }
-    // this.props.submitTitle(recipeData);
-    // this.setState(recipeData)
-  },
   addIngredient: function(){
     var ingredientData = {
       quantity: this.state.quantity,
       measurement: this.state.measurement,
       ingName: this.state.ingName
     };
-
-    // this.state.recipe.ingredients.push(ingredientData);
-    console.log(this.state);
-    // var myModel = this.state.recipe.toJSON();
-    // console.log(myModel);
+    this.state.recipe.attributes.ingredients.push(ingredientData);
+    this.setState(this.state.recipe.get('ingredients'))
+  },
+  handleSubmit: function(e){
+    e.preventDefault();
+    this.state.recipe.attributes.serving = this.state.serving;
+    this.state.recipe.attributes.recipe = this.state.title;
+    var recipeData = this.state.recipe;
+    recipeData = recipeData.toJSON();
+    recipeData.username = localStorage.getItem('username');
+    this.props.submitTitle(recipeData);
   },
   render: function(){
+    var ingredients = this.state.recipe.get('ingredients')
+    console.log('state:', this.state);
+    var intgredientShow = ingredients.map(function(ingredient){
+      console.log('ingredeint state:', ingredient);
+      return(
+        <li className="list-group-item" key={ingredient.ingName}>
+          {ingredient.ingName} {ingredient.measurement} {ingredient.quantity}
+        </li>
+      )
+    })
     return (
       <div className="col-md-7">
         <form onSubmit={this.handleSubmit}>
           <div>
             <h3 htmlFor="quantity" className="">Recipe</h3>
-            <input onChange={this.handleRecipeTitle} value={this.state.recipe.recipe} name="recipeTitle" id="recipe-title" type="text" placeholder="Recipe Name" />
-            <input onChange={this.handleServing} value={this.state.recipe.serving} name="recipeServing" id="recipe-serving" type="text" placeholder="Servings Quantity" />
+            <input onChange={this.handleRecipeTitle} value={this.state.title} name="recipeTitle" id="recipe-title" type="text" placeholder="Recipe Name" />
+            <input onChange={this.handleServing} value={this.state.serving} name="recipeServing" id="recipe-serving" type="text" placeholder="Servings Quantity" />
           </div>
           <div className="form-group">
             <h3 htmlFor="quantity" className="">Ingredients</h3>
             <input onChange={this.handleQuantity} value={this.state.quantity} name="recipeQuantity" id="recipe-Quantity" type="text" placeholder="Quantity" />
             <input onChange={this.handleMeasurement} value={this.state.measurement} name="recipeMeasurement" id="recipe-measurement" type="text" placeholder="Cups or Pounds?" />
             <input onChange={this.handleIngredient} value={this.state.ingName}  name="recipeIngredient" id="recipe-Ingredient" type="text" placeholder="Type of Ingredient" />
-            <button className="btn btn-default" onClick={this.addIngredient} type="button">Add Ingredient!</button>
-
+            {intgredientShow}
+          <button className="btn btn-default" onClick={this.addIngredient} type="button">Add Ingredient!</button>
         </div>
           <input className="btn btn-primary" type="submit" value="Beam Me Up!" />
         </form>
@@ -87,9 +92,8 @@ var RecipeForm = React.createClass({
     recipe.save().then(()=>{
       recipe.set('objectId', recipe.get('objectId'))
       recipe.fetch().then(function(){
-        self.state.recipe = recipe;
+        self.setState({ recipe })
       })
-
     });
       console.log('recipe: ', recipeData);
   },

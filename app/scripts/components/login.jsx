@@ -119,8 +119,10 @@ var AccountContainer = React.createClass({
     $.get('https://masterj.herokuapp.com/login?username=' + username + '&password=' + password).then(function(response){
         console.log(response.username);
         console.log(response.sessionToken);
+        console.log(response);
         localStorage.setItem('username', response.username);
         localStorage.setItem('token', response.sessionToken);
+
 //how do I get to the recipe page when logged in? Received the sessionToken?
         // if (response.sessionToken) {
         //   self.props.router.navigate('', {trigger: true});
