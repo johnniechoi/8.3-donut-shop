@@ -15,7 +15,7 @@ componentWillMount: function(){
 },
 render: function(){
   var messages = this.state.message;
-  var messageList - messages.map(function(data))
+  var messageList = messages.map(function(data))
     return(
 
     )

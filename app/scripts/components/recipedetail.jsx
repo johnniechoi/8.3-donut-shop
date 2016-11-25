@@ -38,6 +38,7 @@ var RecipeDetailContainer = React.createClass({
     var recipeId = this.props.recipeId;
     recipe.set('objectId', recipeId)
     recipe.fetch().then(function(){
+      console.log('fetch', this.state);
       self.setState({servings: recipe.get('serving'), recipe: recipe})
     })
   },
@@ -49,6 +50,7 @@ var RecipeDetailContainer = React.createClass({
     this.setState({servings: newServings, factor: newFactor})
   },
   render: function(){
+    console.log(Recipe);
     var recipe = this.state.recipe.get('recipe')
     var ingredients = this.state.recipe.get('ingredients')
     // console.log('ingredients: ', ingredients);

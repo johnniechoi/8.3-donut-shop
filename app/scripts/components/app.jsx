@@ -66,12 +66,14 @@ var RecipeList = React.createClass({
   getInitialState: function(){
     var self = this;
     var recipe = new RecipeModel();
-    recipe.fetch().then(function(){
+    recipe.fetch().then(function(data){
+      console.log('fetch model', data);
       self.setState({recipe: recipe})
       // console.log('recipe: ', recipe);
     })
     var recipes = new RecipeCollection();
-    recipes.fetch().then(function(){
+    recipes.fetch().then(function(data){
+      // console.log('fetch', data);
       self.setState({recipes: recipes})
       // console.log('recipes: ', recipes);
     })

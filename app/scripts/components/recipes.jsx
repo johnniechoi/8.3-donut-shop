@@ -89,6 +89,7 @@ var RecipeForm = React.createClass({
     this.setState({ recipeData });
     var recipe = new Recipe();
     recipe.set(recipeData);
+    // console.log(localStorage);
     recipe.save().then(()=>{
       recipe.set('objectId', recipe.get('objectId'))
       recipe.fetch().then(function(){
